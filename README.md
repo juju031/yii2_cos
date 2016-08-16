@@ -1,66 +1,76 @@
-##FTP for Yii2
-##安装
+## tencentyun-cos-php
 
-```
-composer require "juju/ftp:1.0"
+SDK for [腾讯云对象存储服务](http://wiki.qcloud.com/wiki/COS%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D)
 
-"juju/ftp": "~1.0.0"
-```
+## 源码集成
 
-##控制器
-```
-use \juju\ftp\FtpClient;
-$ftp = new FtpClient();
-$ftp->connect($host);
-$ftp->login($login, $password);
+从github下载源码装入到您的程序中，并加载include.php
 
-or
+## 修改配置
 
-$ftp = new FtpClient();
-$ftp->connect($host, true, 22);
-$ftp->login($login, $password);
+修改Qcloud_cos/Conf.php内的APPID、SECRET_ID、SECRET_KEY等信息为您的配置
 
-$local_file = dirname(Yii::$app->BasePath)."/LICENSE.md";
-$result = $ftp->putFromPath($local_file);
+## 程序示例（sample.php）
 
-$ftp->putAll($source_directory, $target_directory);
+``` php
+require('./include.php');
+use Qcloud_cos\Auth;
+use Qcloud_cos\Cosapi;
+use Qcloud_cos\CosDb;
 
-$ftp->putAll($source_directory, $target_directory, FTP_BINARY);
+Cosapi::setTimeout(180);
 
-$ftp->putAll($source_directory, $target_directory, FTP_ASCII);
+//创建文件夹
+$bucketName = 'test';
+$srcPath = './test.log';
+$dstPath = '/sdk/test.log';
+$dstFolder = '/sdk/';
+$createFolderRet = Cosapi::createFolder($bucketName, $dstFolder);
+var_dump($createFolderRet);
 
-$size = $ftp->dirSize();
+//上传文件
+$bizAttr = "";
+$insertOnly = 0;
+$sliceSize = 3 * 1024 * 1024;
+$uploadRet = Cosapi::upload($bucketName, $srcPath, $dstPath,$bizAttr,$sliceSize, $insertOnly);
+var_dump($uploadRet);
 
-$size = $ftp->dirSize('/path/of/directory');
+//目录列表
+$listnum = 20;
+$pattern = "eListBoth";
+$order = 0;
+$listRet = Cosapi::listFolder($bucketName, $dstFolder,$listnum,$pattern, $order);
+var_dump($listRet);
 
-$total = $ftp->count();
+//更新目录信息
+$bizAttr = "";
+$updateRet = Cosapi::updateFolder($bucketName, $dstFolder, $bizAttr);
+var_dump($updateRet);
 
-$total = $ftp->count('/path/of/directory');
+//更新文件信息
+$bizAttr = "";
+$authority = "eWPrivateRPublic";
+$customer_headers_array = array(
+    'Cache-Control' => "no",
+    'Content-Type' => "application/pdf",
+    'Content-Language' => "ch",
+);
+$updateRet = Cosapi::update($bucketName, $dstPath, $bizAttr,$authority, $customer_headers_array);
+var_dump($updateRet);
 
-$total_file = $ftp->count('.', 'file');
+//查询目录信息
+$statRet = Cosapi::statFolder($bucketName, $dstFolder);
+var_dump($statRet);
 
-$total_file = $ftp->count('/path/of/directory', 'file');
+//查询文件信息
+$statRet = Cosapi::stat($bucketName, $dstPath);
+var_dump($statRet);
 
-$total_dir = $ftp->count('/path/of/directory', 'directory');
+//删除文件
+$delRet = Cosapi::delFile($bucketName, $dstPath);
+var_dump($delRet);
 
-$total_link = $ftp->count('/path/of/directory', 'link');
-
-$items = $ftp->scanDir();
-
-var_dump($ftp->scanDir('.', true));
-
-$ftp->exec($command);
-
-$ftp->pasv(true);
-
-$ftp->chmod('0777', 'file.php');
-
-$ftp->rmdir('path/of/directory/to/remove');
-
-$ftp->rmdir('path/of/directory/to/remove', true);
-
-$ftp->mkdir('path/of/directory/to/create');
-
-$ftp->mkdir('path/of/directory/to/create', true);
-
+//删除目录
+$delRet = Cosapi::delFolder($bucketName, $dstFolder);
+var_dump($delRet);
 ```
