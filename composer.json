@@ -1,0 +1,23 @@
+{
+    "name": "juju/cos",
+    "description": "Yii2 腾讯 cos 文件上传",
+    "type": "yii2-extension",
+    "keywords": ["tencentyun", "qcloud", "cos"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "juju",
+            "email": "3417919@qq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "juju\\cos\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "yiisoft/yii2": ">=2.0.6"
+    }
+}
