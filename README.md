@@ -1,66 +1,78 @@
-##FTP for Yii2
-##安装
+## 说明
+基于腾讯云cos接口修改
 
-```
-composer require "juju/ftp:1.0"
+SDK for [腾讯云对象存储服务](http://wiki.qcloud.com/wiki/COS%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D)
 
-"juju/ftp": "~1.0.0"
-```
+## 使用方式
 
-##控制器
-```
-use \juju\ftp\FtpClient;
-$ftp = new FtpClient();
-$ftp->connect($host);
-$ftp->login($login, $password);
 
-or
+``` php
+use \juju\cos\Auth;
+use \juju\cos\Cosapi;
+use \juju\cos\CosDb;
 
-$ftp = new FtpClient();
-$ftp->connect($host, true, 22);
-$ftp->login($login, $password);
+Cosapi::setTimeout(180);
 
-$local_file = dirname(Yii::$app->BasePath)."/LICENSE.md";
-$result = $ftp->putFromPath($local_file);
+//创建文件夹
+$bucketName = 'test';
+$srcPath = './test.log';
+$dstPath = '/sdk/test.log';
+$dstFolder = '/sdk/';
+$createFolderRet = Cosapi::createFolder($bucketName, $dstFolder);
+var_dump($createFolderRet);
 
-$ftp->putAll($source_directory, $target_directory);
+//上传文件
+$bucketName = 'test';
+$srcPath = dirname(Yii::$app->BasePath)."/LICENSE.md";
+$dstPath = "/temp/LICENSE.md";
+$bizAttr = "";
+$insertOnly = 0;
+$sliceSize = 3 * 1024 * 1024;
+$uploadRet = Cosapi::upload($bucketName, $srcPath, $dstPath,$bizAttr,$sliceSize, $insertOnly);
+var_dump($uploadRet);
 
-$ftp->putAll($source_directory, $target_directory, FTP_BINARY);
+//目录列表
+$bucketName = 'test';
+$dstFolder = "/temp/";
+$listnum = 20;
+$pattern = "eListBoth";
+$order = 0;
+$listRet = Cosapi::listFolder($bucketName, $dstFolder,$listnum,$pattern, $order);
+var_dump($listRet);
 
-$ftp->putAll($source_directory, $target_directory, FTP_ASCII);
+//更新目录信息
+$bucketName = 'test';
+$dstFolder = "/temp/";
+$bizAttr = "";
+$updateRet = Cosapi::updateFolder($bucketName, $dstFolder, $bizAttr);
+var_dump($updateRet);
 
-$size = $ftp->dirSize();
+//更新文件信息
+$bizAttr = "";
+$authority = "eWPrivateRPublic";
+$customer_headers_array = array(
+    'Cache-Control' => "no",
+    'Content-Type' => "application/pdf",
+    'Content-Language' => "ch",
+);
+$updateRet = Cosapi::update($bucketName, $dstPath, $bizAttr,$authority, $customer_headers_array);
+var_dump($updateRet);
 
-$size = $ftp->dirSize('/path/of/directory');
+//查询目录信息
+$statRet = Cosapi::statFolder($bucketName, $dstFolder);
+var_dump($statRet);
 
-$total = $ftp->count();
+//查询文件信息
+$bucketName = 'test';
+$dstPath = "/temp/LICENSE.md";
+$statRet = Cosapi::stat($bucketName, $dstPath);
+var_dump($statRet);
 
-$total = $ftp->count('/path/of/directory');
+//删除文件
+$delRet = Cosapi::delFile($bucketName, $dstPath);
+var_dump($delRet);
 
-$total_file = $ftp->count('.', 'file');
-
-$total_file = $ftp->count('/path/of/directory', 'file');
-
-$total_dir = $ftp->count('/path/of/directory', 'directory');
-
-$total_link = $ftp->count('/path/of/directory', 'link');
-
-$items = $ftp->scanDir();
-
-var_dump($ftp->scanDir('.', true));
-
-$ftp->exec($command);
-
-$ftp->pasv(true);
-
-$ftp->chmod('0777', 'file.php');
-
-$ftp->rmdir('path/of/directory/to/remove');
-
-$ftp->rmdir('path/of/directory/to/remove', true);
-
-$ftp->mkdir('path/of/directory/to/create');
-
-$ftp->mkdir('path/of/directory/to/create', true);
-
+//删除目录
+$delRet = Cosapi::delFolder($bucketName, $dstFolder);
+var_dump($delRet);
 ```

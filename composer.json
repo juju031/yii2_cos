@@ -1,27 +1,23 @@
 {
-    "name": "juju/ftp",
-    "type": "library",
-    "description": "ftp功能",
+    "name": "juju/cos",
+    "description": "Yii2 腾讯 cos 文件上传",
+    "type": "yii2-extension",
+    "keywords": ["tencentyun", "qcloud", "cos"],
     "license": "MIT",
-    "keywords": [
-        "yii2",
-        "extension",
-        "ftp",
-        "sftp",
-        "ssl-ftp",
-        "ssl",
-        "file",
-        "server",
-        "lib",
-        "helper"
+    "authors": [
+        {
+            "name": "juju",
+            "email": "3417919@qq.com"
+        }
     ],
-    "require": {
-        "php": ">=5.4.0",
-        "yiisoft/yii2": ">=2.0.6"
-    },
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "juju\\ftp\\": "src/"
+            "juju\\cos\\": "src/"
         }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "yiisoft/yii2": ">=2.0.6"
     }
 }
