@@ -14,7 +14,7 @@ params.php添加
 return [
     'COS_APPID' => '111',
     'COS_SECRET_ID' => '222',
-    'COS_SECRET_KEY' => '333',
+    'COS_SECRET_KEY' => '3331',
 ];
 
 
