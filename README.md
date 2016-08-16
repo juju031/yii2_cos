@@ -7,6 +7,17 @@ SDK for [腾讯云对象存储服务](http://wiki.qcloud.com/wiki/COS%E4%BA%A7%E
 
 
 ``` php
+
+params.php添加
+
+<?php
+return [
+    'COS_APPID' => '111',
+    'COS_SECRET_ID' => '222',
+    'COS_SECRET_KEY' => '333',
+];
+
+
 use \juju\cos\Auth;
 use \juju\cos\Cosapi;
 use \juju\cos\CosDb;
