@@ -1,0 +1,27 @@
+{
+    "name": "juju/ftp",
+    "type": "library",
+    "description": "ftp功能",
+    "license": "MIT",
+    "keywords": [
+        "yii2",
+        "extension",
+        "ftp",
+        "sftp",
+        "ssl-ftp",
+        "ssl",
+        "file",
+        "server",
+        "lib",
+        "helper"
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": ">=2.0.6"
+    }
+    "autoload": {
+        "psr-4": {
+            "juju\\ftp\\": "src/"
+        }
+    }
+}
