@@ -20,6 +20,9 @@ $ftp = new FtpClient();
 $ftp->connect($host, true, 22);
 $ftp->login($login, $password);
 
+$local_file = dirname(Yii::$app->BasePath)."/LICENSE.md";
+$result = $ftp->putFromPath($local_file);
+
 $ftp->putAll($source_directory, $target_directory);
 
 $ftp->putAll($source_directory, $target_directory, FTP_BINARY);
@@ -59,7 +62,5 @@ $ftp->rmdir('path/of/directory/to/remove', true);
 $ftp->mkdir('path/of/directory/to/create');
 
 $ftp->mkdir('path/of/directory/to/create', true);
-
-var_dump($ftp->help());
 
 ```
